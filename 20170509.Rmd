@@ -1,0 +1,412 @@
+---
+title: "R_0509"
+author: "York Lin"
+date: "2017年5月09日"
+output: html_document
+---
+what is R?
+- https://zh.wikipedia.org/wiki/R%E8%AF%AD%E8%A8%80
+
+R vs Python?
+- https://www.datacamp.com/community/tutorials/r-or-python-for-data-analysis
+
+most popular programming language for analytics
+- http://www.kdnuggets.com/polls/2015/r-vs-python.html
+- http://www.kdnuggets.com/2016/06/r-python-top-analytics-data-mining-data-science-software.html
+
+Kaggle
+- https://www.kaggle.com/
+
+UCI dataset
+- https://archive.ics.uci.edu/ml/datasets.html
+
+##R intro
+Functional Programming
+```{r, echo=TRUE}
+x=1:5 #values:int[1:5] 1 2 3 4 5
+sum(x) #所有x的數值相加
+mean(x) #算術平均數
+var(x) #變異數:量測所有資料到平均數的平均距離 http://estat.ncku.edu.tw/topic/desc_stat/base/variance.html
+sqrt(var(x)) #開根號
+y = 10/3
+ceiling(y) #大於等於的最小整數
+floor(y)  #小於等於的最小整數
+round(y) #四捨五入
+trunc(y) #無條件捨去
+pi #回傳圓周率
+log(3) #naturl log值 (非10為底的log數)
+log2(3) #以二為底的log值
+abs(-3) #絕對值
+sqrt(16) #開根號
+```
+
+## RDemo
+```{r RDemo, echo=TRUE}
+#使用範例資料
+data(anscombe) #叫出內建名叫anscombe的資料集
+#使用資料中x1,y1變數畫出點散布圖
+plot(y1 ~ x1, data = anscombe) #抓出資料中的x1,y1做圖(前面擺row)
+#建立回歸模型並assign到lmfit變數中
+lmfit <- lm(y1~x1, data=anscombe) #把資料丟到回歸分析的模組中 
+#在點散佈圖上加上迴歸線 
+abline(lmfit, col="red") #用剛剛存的回歸資料(lmfit),畫出回歸線
+```
+#R語言的資料型態
+##Basic type 
+- numeric: 1,2,1.2  #數值資料(常用)
+- integer: 1L,2L,3L  #整數資料
+- character: "string" #字串資料
+- logical: TRUE,FALSE,T,F #布林資料
+- complex: 1+4i #複數資料
+
+## Basic Objects
+atomic:
+(由相同資料型態組成)  
+- vector  #向量資料(單一數值)
+- matrix  #矩陣資料
+- factor #因子向量(有序性)
+#因素向量和一般向量的最大差異在於因素向量主要是用來存放分類變數，而非單純的數字，這部分的區別與資料尺度有關，指定一組資料集合為因素向量等於告訴 R ，該變數就是「順序」或者「分類」尺度。
+
+recursive:
+(可以有混合的資料型態)
+- dataframe #資料表格,可以有不同的資料型態
+- list  #列表
+
+##R basic command
+```{R}
+#文件查詢
+help(package="base") #對package進行查詢 
+?base:sum #查詢base裡面的sum
+?sum #直接查詢sum
+help.search("sum") #同上
+??sum #全域搜索
+
+#範例演釋
+demo()
+
+#使用內建資料集
+data() 
+
+#看現有變數
+ls()
+#移除變數
+rm()
+#查看資料型態
+# difference between class, typeof, and mode
+#http://stackoverflow.com/questions/6258004/r-types-and-classes-of-variables
+class() #表示在R語言中的資料類型是什麼
+typeof() #跟mode基本上相同 mode是為了和S語言兼容,typeof是R語言特有的
+mode() #表示實際存在記憶體中的資料類型是什麼
+#查看資料結構
+
+str()#用來查看資料結構
+
+str(c(1,2,3))  #返回型態,內容 num [1:3] 1 2 3  
+```
+
+##Basic computing
+```{R, echo=TRUE}
+3+8
+3-8
+3*8
+3/8
+1/0
+11%%2
+3<4
+2==5
+T == TRUE
+```
+
+##Assignment
+```{R}
+a = 3
+a <- 5 # ( alt + - ) #基本上與=相同,只是因為S語言而沿用 <- 符號
+assign("a",3) #function式的賦值方式
+a / 2
+a = a / 2
+
+```
+
+##Vector
+- R語言最基本的物件
+```{R, echo=TRUE}
+character(5)  # 五個形態為string的vector character vector of length 5 
+numeric(5) #5個型態為numeric數值得vector
+logical(5) #五個布林值 預設為FALSE
+x = c(1,2,3,7) #c為combain的意思
+y= c(2,3,5,1)
+x+y #每個值各自相加
+x*y #每個值各自相乘
+x - y  
+x/y
+
+x + 10 #每個值都加十
+x + c(10) #與上面相等
+x + c(1,2) #以1,2循環的方式相加
+x + c(1,2,1,2) 
+
+x == c(1,99,3,4) #對內部的值做個別的布林判斷是否相等
+
+c(1,2,3)
+c(2,T,3+0i,"one") #只要有不同的資料型態,在做combain時會自動變成相同資料型態 character>complex>numeric>logical
+c(2,T,3+0i)  #布林值T=1
+c(c(1,2,3,4),c(5)) #combain內可以由小combain組成
+
+x = c(1,2,3,4,NA) #NA是空值(有記憶體位置但是沒有值)
+is.na(x) #判斷內容是否為NA
+sum(x) #只要有NA就會顯示NA
+sum(x, na.rm=T) #把NA移除後相加
+
+height_vec = c(180,169,173)
+height_vec
+names(height_vec) = c("Brian", "Toby", "Sherry") #替height_vec中的每個值命名
+height_vec
+
+name_vec = c("Brian", "Toby", "Sherry") 
+names(height_vec) = name_vec #可用變數的方式傳入命名
+height_vec > 175 #判斷height_vec的每個值是否大於175
+height_vec / 100 #將每個值都除以100
+height_vec > 175 | height_vec < 170 #or判斷
+height_vec < 175 & height_vec > 170 #and判斷
+
+#R 的index從1開始
+height_vec[c(1)] #index #用index 取height_vec的第一個值
+height_vec['Brian'] #variable name #用名稱取值 
+height_vec[height_vec > 175] #condition (boolean vector) #用條件式取值
+
+```
+
+##seq() & rep() & paste()
+```{R, echo=TRUE}
+1:20 #產生1~20的數
+seq(1,20) #同上
+20:1 #從20~1
+?seq 
+seq(1,20,by=2) #1~20 間隔2
+seq(1,20,length=2) #1~20 分成兩個等距的結點
+
+
+rep(1,5) #repeated出五個1
+?rep
+rep(c(1,2), times=5) #repead c(1,2)五次
+rep(c(1,2), times=c(1,2))  #第一個數重複一次,第二個數重複兩次[1] 1 2 2
+rep(c(1,2), each=5) #每個內容都個別重複五次  [1] 1 1 1 1 1 2 2 2 2 2
+rep_len(c(1,2),5) #重複至總長度為5
+
+paste("the","big","bang","theory") #將所有字串組合(以空白分隔) "the big bang theory"
+paste("big","bang",sep="") #將所有字串組合(不分隔)
+paste("big","bang",sep=";")
+paste(c("big","bang"),1:4) #將前後各別組合 "big 1"  "bang 2" "big 3"  "bang 4"
+length(paste(c("big","bang"),1:4,collapse = "+" )) #只有一個字串
+```
+
+##Matrix
+```{R}
+matrix(1:9, byrow=TRUE, nrow=3) #產生一個陣列填入1~9 有三個row 依照row為順序填入
+matrix(1:9, nrow=3)
+kevin = c(85,73)
+marry = c(72,64)
+jerry = c(59,66)
+mat = matrix(c(kevin, marry, jerry), nrow=3, byrow= TRUE)
+colnames(mat) = c('first', 'second') #名稱
+rownames(mat) = c('kevin', 'marry', 'jerry')
+mat
+
+# basic
+dim(mat) #顯示這個矩陣的row&clo數 [1] 3 2
+nrow(mat)
+ncol(mat)
+t(mat) #transpose 矩陣轉置
+mat[1,] #顯示第一個row的資料
+mat[,1] #顯示第一個clo的資料
+mat[1:2,] #顯示row的前兩筆資料
+mat[c('kevin','jerry'),] #kevin,jerry的資料
+mat[c('kevin','jerry'),'first'] #kevin,jerry的第一次資料
+rowSums(mat) #將所有row的資料相加
+colSums(mat) #將所有col的資料相加
+
+# insert new value
+mat2 = rbind(mat, c(78,63)) #新增row資料
+rownames(mat2)[nrow(mat2)] = 'sam' #替資料命名
+mat2
+
+mat3 = cbind(mat2,c(82,77,70,64))  #新增col資料
+colnames(mat3)[ncol(mat3)] = 'third' #替資料命名
+mat3
+
+rowMeans(mat3) #計算row平均
+colMeans(mat3) #計算col平均
+
+
+# arithmetic
+m1 = matrix(1:4, byrow=TRUE, nrow=2)
+m2 = matrix(5:8, byrow=TRUE, nrow=2)
+
+m1 + m2
+m1 - m2
+m1 * m2 #值個別相乘
+m1 / m2
+
+m1 %*% m2  #矩陣相乘
+
+```
+
+##Factor
+```{R}
+# syntax
+weather= c("sunny","rainy", "cloudy", "rainy", "cloudy")
+class(weather) #[1] "character"
+weather_category = factor(weather) #不重複(組成成分)
+weather_category
+class(weather_category) #[1] "factor"
+# order
+temperature = c("Low", "High", "High", "Medium", "Low", "Medium")
+temperature_category = factor(temperature, order = TRUE, levels = c("Low", "Medium", "High")) #定義大小順序
+temperature_category
+temperature_category[3] > temperature_category[1]
+temperature_category[4] > temperature_category[3]
+
+# change levels name
+weather= c("s","r", "c", "r", "c","r","r") #[1] "s" "r" "c" "r" "c" "r" "r"
+weather_factor = factor(weather) #[1] s r c r c r r, Levels: c r s
+levels(weather_factor) = c("cloudy","rainy","sunny")
+weather_factor#[1] sunny  rainy  cloudy rainy  cloudy rainy  rainy  Levels: cloudy rainy sunny
+```
+
+##Dataframe
+```{R}
+name <- c("Joe", "Bob", "Vicky") 
+age <- c(28, 26, 34)
+gender <- c("Male","Male","Female")
+df <- data.frame(name, age, gender) #將資料組合成列表
+class(df)
+str(df)
+
+
+data(iris) #內建的模擬資料
+head(iris) #查看前幾筆資料
+tail(iris) #查看後幾筆資料
+tail(iris, 10) #查看後10筆資料
+str(iris)
+
+iris[1:3,] #前三筆row資料
+iris[1:3,1] 
+iris[1:3,"Sepal.Length"]
+head(iris[,1:2])
+iris$"Sepal.Length"
+
+#取前五筆包含length 及 width 的資料
+Five.Sepal.iris = iris[1:5, c("Sepal.Length","Sepal.Width")] 
+#可以用條件做篩選
+setosa.data = iris[iris$Species=="setosa",1:5]
+str(setosa.data)
+
+#使用which 做資料篩選
+which(iris$Species=="setosa")
+
+#merge進行資料合併
+flower.type = data.frame(Species = "setosa", Flower = "iris")
+merge(flower.type, iris[1:3,], by ="Species")
+
+df1 = data.frame(CustomerId = c(1:6), Product = c(rep("Toaster", 3), rep("Radio", 3)))
+df2 = data.frame(CustomerId = c(2, 4, 6), State = c(rep("Alabama", 2), rep("Ohio", 1)))
+
+#Inner join:
+merge(x = df1, y= df2, by="CustomerId")
+
+#Outer join: 
+merge(x = df1, y = df2, by = "CustomerId", all = TRUE)
+
+#Left outer: 
+merge(x = df1, y = df2, by = "CustomerId", all.x = TRUE)
+
+#Right outer: 
+merge(x = df1, y = df2, by = "CustomerId", all.y = TRUE)
+
+#Cross join: 
+merge(x = df1, y = df2, by = NULL)
+
+#用order做資料排序
+iris[order(iris$Sepal.Length, decreasing = TRUE),]
+
+#資料轉換
+iris$Species_new <- ifelse(iris$Species %in% c("setosa"), "IsSetosa","Notsetosa")
+
+```
+
+##List
+```{R}
+item = list(thing="hat", size=8.25)
+item
+
+test = list(name="Toby", score = c(87,57,72))
+test$score
+test$score[2]
+
+flower= list(title="iris dataset", data= iris)
+class(flower)
+class(flower$data)
+flower$data[1,"Sepal.Width"]
+```
+
+```{R}
+h = c(180,169,173)
+w = c(73,87,43)
+bmi = w / ((h/100)^2)
+names(bmi) = c("Brian", "Toby", "Sherry")
+bmi < 18.5 | bmi >= 24
+
+
+```
+
+
+#求成績加權平均
+```{R}
+kevin = c(85,73)
+marry = c(72,64)
+jerry = c(59,66)
+mat = matrix(c(kevin, marry, jerry), nrow=3, byrow= TRUE)
+colnames(mat) = c('first', 'second')
+rownames(mat) = c('kevin', 'marry', 'jerry')
+
+final = mat %*% c(0.4,0.6)
+final
+
+cbind(mat,final)
+mat2 = cbind(mat,final)
+mat2
+colnames(mat2)[ncol(mat2)] = 'final'
+mat2
+```
+
+
+
+#找出股票資料中日期大於2014年三月到八月間台積電最高收盤價
+```{R}
+tw2330 = read.csv("E:/riii/data/2330.csv", header=TRUE)
+str(tw2330)
+tw2330$Date = as.Date(tw2330$Date) #以Date格式顯示
+max(tw2330$Close) #找出收盤價最高點
+stock2 = tw2330[(tw2330$Date >= '2014-03-01' & tw2330$Date < '2014-08-31'),] #抓出時間內的資料
+max(stock2$Close) #抓出最大值
+
+summary(stock2$Close) #彙整計算結果
+
+order_stock = stock2[order(stock2$Close,decreasing = T),] #decreasing 由多到少
+order_stock[1,]
+order_stock[nrow(order_stock),]
+order_stock[1,"Close"]
+order_stock[nrow(order_stock),"Close"]
+
+```
+
+
+
+
+
+
+
+
+
+
+
