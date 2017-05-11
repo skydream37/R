@@ -336,16 +336,18 @@ iris$Species_new <- ifelse(iris$Species %in% c("setosa"), "IsSetosa","Notsetosa"
 
 ##List
 ```{R}
-item = list(thing="hat", size=8.25)
+item = list(thing="hat", size=8.25) #給予名稱與值
 item
 
 test = list(name="Toby", score = c(87,57,72))
 test$score
 test$score[2]
 
-flower= list(title="iris dataset", data= iris)
+flower= list(title="iris dataset", data= iris) #放dataframe進去list裡面
 class(flower)
-class(flower$data)
+class(flower$data) #用$取值 (flower表格內面有title跟data的資料)
+flower$data$Species #flower裡面的data裡面的species資料
+class(flower$data$Species)  #資料型態(Species的)(factor)
 flower$data[1,"Sepal.Width"]
 ```
 
@@ -383,7 +385,7 @@ mat2
 
 #找出股票資料中日期大於2014年三月到八月間台積電最高收盤價
 ```{R}
-tw2330 = read.csv("E:/riii/data/2330.csv", header=TRUE)
+tw2330 = read.csv("E:/riii/data/2330.csv", header=TRUE) #.csv用來讀CSV檔另外還有.table,用table要指定分格符號sep,header是問你有沒有標題
 str(tw2330)
 tw2330$Date = as.Date(tw2330$Date) #以Date格式顯示
 max(tw2330$Close) #找出收盤價最高點
