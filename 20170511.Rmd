@@ -39,7 +39,7 @@ for(i in 1:10){
 }
 
 sum=0
-for(i in 1:100){
+for(i in 1:100){ #把一加到一百
   sum= sum+ i;
 }
 sum
@@ -49,7 +49,7 @@ sum(1:100) #把1加到100
 
 sum = 0;
 cnt = 0;
-while(cnt <= 100){
+while(cnt <= 100){ #把1加到100
   sum = sum + cnt;
   cnt = cnt + 1;
 }
@@ -62,12 +62,12 @@ for(i in seq_len(nrow(mat))) {
   }
 }
 ```
-
+九九乘法表
 ```{R}
 mat = matrix(rep(1,81),nrow = 9)
   for(i in 1:9){
     for(j in 1:9){
-      mat[i,j] = paste(i*i,"XX",j*j,"=",i*i*j*j,"")
+      mat[i,j] = paste(i,"X",j,"=",i*j,"")
     }
   }
   print(mat)
@@ -87,21 +87,22 @@ mat
 
 ##Function
 ```{R}
-f = function(a){
+f = function(a){ #()裡面放參數 {}裡面放腳本
     print(a+3)
 }
 
-f1 = function(a = 3) {
+f1 = function(a = 3) { #放預設值 如果沒有倒入參數,就會導入預設值
     return(a+3)
 }
 
-f2 = function(a, b = 2, c = NULL) {
+f2 = function(a, b = 2, c = NULL) { #可帶預設參數
    return(b + 1)
 }
 
-b = 3
+b = 3 #全域變數
 f3 = function(a) {
-    b = 2
+    b = 2 #區域變數
+    
     return(b)
 }
 
@@ -113,12 +114,37 @@ f4 = function(a,b){
 }
 ```
 
+```{R}
+filename= "E:/riii/data/match.txt"
+mat = matrix(rep(1,25), nrow=5, ncol = 5)
+rownames(mat) = c("A","B","C","D","E")
+colnames(mat) = c("A","B","C","D","E")
+read=read.table(filename,sep = "|")
+for (i in 1:20){
+  mat[read[i,1],read[i,2]]=read[i,3];
+  
+}
+for (i in 1:5){
+  for (j in 1:5){
+    if (i==j){
+      mat[i,j]=-1
+    }
+  }
+}
+
+print(mat)
+
+```
+
+```{R}
+```
+
 ##lapply sapply apply tapply
 ```{R}
 grades =list(kevin = c(80,60,92), marry = c(56,75,64,84,56), QOO = c(10,20,3,4,10))
-
-lapply(grades, sum)
-lapply(grades, mean)
+#lapply將函式套用在list上的每個元素 輸出list
+lapply(grades, sum) #算總合
+lapply(grades, mean) #算平均
 lapply(grades, function(e){list(sum = sum(e), min = min(e))})
 
 m1 = matrix(1:4, byrow=TRUE, nrow=2)
@@ -127,6 +153,7 @@ m2 = matrix(5:8, byrow=TRUE, nrow=2)
 li = list(m1, m2)
 lapply(li, mean)
 
+#sapply 跟lapplt一樣 只是輸出向量
 class(lapply(grades, sum))
 sapply(grades, sum)
 class(sapply(grades, sum))
@@ -136,21 +163,28 @@ m2 = matrix(5:8, byrow=TRUE, nrow=2)
 li = list(m1, m2)
 sapply(li, mean)
 sapply(li,function(e) e[1,])
-
+#apply用於陣列中
 m = matrix(1:4, byrow=TRUE, nrow=2)
 apply(m, 1, sum) # rowsums
 apply(m, 2, sum) # colsums
 
 rowmeans = apply(m, 1, mean)
 colmeans = apply(m, 2, mean)
-
+#tapply可以以分組做計算
 x = c(80,70,59,88,72,57)
 t = c(1,1,2,1,1,2)
-tapply(x,t, mean)
+tapply(x,t, mean)#兩組個別取平均值
+
+```
+#iris p.86
+```{R}
+
 
 data(iris)
 
 tapply(iris$Sepal.Length, iris$Species, mean)
+
+
 
 ```
 
@@ -196,6 +230,8 @@ cdc$h_group = cut(cdc$height,seq(45,95,by=5),right=F)
 str(cdc)
 
 ```
+
+
 
 ##統計圖
 ```{R}
