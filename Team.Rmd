@@ -1,0 +1,142 @@
+---
+title: "Team"
+output: html_document
+---
+
+```{R}
+CSV_104R=read.csv("E:/TeamRepository/data/CSV/104R.csv",fileEncoding = "UTF-8-BOM")
+CSV_518_wei=read.csv("E:/TeamRepository/data/CSV/518_wei.csv",fileEncoding = "UTF-8-BOM")
+CSV_518main=read.csv("E:/TeamRepository/data/CSV/518main.csv",fileEncoding = "UTF-8-BOM")
+CSV_1111_crawler=read.csv("E:/TeamRepository/data/CSV/1111_crawler.csv",fileEncoding = "UTF-8-BOM")
+CSV_ptt_threading=read.csv("E:/TeamRepository/data/CSV/ptt_threading.csv",fileEncoding = "UTF-8-BOM")
+CSV_test_json=read.csv("E:/TeamRepository/data/CSV/test_json.csv",fileEncoding = "UTF-8-BOM")
+CSV_yes123_json=read.csv("E:/TeamRepository/data/CSV/yes123_json.csv",fileEncoding = "UTF-8-BOM")
+
+All_data=list('CSV_518_wei','CSV_518main','CSV_1111_crawler','CSV_ptt_threading','CSV_test_json','CSV_yes123_json')
+
+mergeall=CSV_104R
+
+for (i in All_data){
+  C=mergeall
+  print(C)
+  mergeall=merge(x =C , y =i , all = TRUE);
+  #print(i)
+}
+print(mergeall)
+#CSV_yes123_json = as.factor(t(CSV_yes123_json))
+
+#barplot(table(CSV_yes123_json)
+#pie(table(t(CSV_yes123_json)))
+
+
+
+```
+
+```{R}
+
+library(jsonlite) 
+# Load the package required to read JSON files.
+library("rjson")
+# 將所有資料倒入成list
+json_104R <-            fromJSON(file="E:/TeamRepository/data/json/104R.json")  #V
+json_518_wei <-         fromJSON(file="E:/TeamRepository/data/json/518_wei.json") #V
+json_518main <-         fromJSON(file="E:/TeamRepository/data/json/518main.json") #V
+json_1111_crawler <-    fromJSON(file="E:/TeamRepository/data/json/1111_crawler.json")
+json_ptt_threading <-   fromJSON(file="E:/TeamRepository/data/json/ptt_threading.json")
+json_test_json <-       fromJSON(file="E:/TeamRepository/data/json/test_json.json")
+json_yes123_json <-     fromJSON(file="E:/TeamRepository/data/json/yes123_json.json")
+# Convert JSON file to a data frame.
+
+
+#把json_104R跟json_test_json的數值做平均(104的相似資料)
+avg_104_mat = matrix(rep(0, length(json_104R)*2), nrow=length(json_104R))
+i = c(1)
+for (name in names(json_104R)){
+  avg_104_mat[i,1] = name
+  avg_104_mat[i,2] = round((json_104R[[name]]^2+json_test_json[[name]]^2)^0.5)
+  i = i + c(1)
+}
+
+#把json_518_wei跟json_518main的數值做平均(104的相似資料)
+avg_518_mat = matrix(rep(0, length(json_518_wei)*2), nrow=length(json_518_wei))
+i = c(1)
+for (name in names(json_518_wei)){
+  avg_518_mat[i,1] = name
+  avg_518_mat[i,2] = round((json_518_wei[[name]]^2+json_518main[[name]]^2)^0.5)
+  i = i + c(1)
+}
+
+#1111_crawler的資料
+avg_1111_mat = matrix(rep(0, length(json_1111_crawler)*2), nrow=length(json_1111_crawler))
+i = c(1)
+for (name in names(json_1111_crawler)){
+  avg_1111_mat[i,1] = name
+  avg_1111_mat[i,2] = json_1111_crawler[[name]]
+  i = i + c(1)
+}
+
+#json_ptt_threading的資料
+avg_ptt_mat = matrix(rep(0, length(json_ptt_threading)*2), nrow=length(json_ptt_threading))
+i = c(1)
+for (name in names(json_ptt_threading)){
+  avg_ptt_mat[i,1] = name
+  avg_ptt_mat[i,2] = json_ptt_threading[[name]]
+  i = i + c(1)
+}
+
+#json_yes123_json的資料
+avg_yes123_mat = matrix(rep(0, length(json_yes123_json)*2), nrow=length(json_yes123_json))
+i = c(1)
+for (name in names(json_yes123_json)){
+  avg_yes123_mat[i,1] = name
+  avg_yes123_mat[i,2] = json_yes123_json[[name]]
+  i = i + c(1)
+}
+
+
+avg_all_mat = matrix(rep(0, length(json_104R)*2), nrow=length(json_104R))
+
+i = c(1)
+
+for (name in names(json_104R)){
+  avg_all_mat[i,1] = name
+  avg_all_mat[i,2] = (as.numeric(avg_104_mat[i,2])+as.numeric(avg_518_mat[i,2])+as.numeric(avg_1111_mat[i,2])+as.numeric(avg_ptt_mat[i,2])+as.numeric(avg_yes123_mat[i,2]))
+  i = i + c(1)
+}
+kkk=as.data.frame(avg_all_mat)
+rrr=head.matrix(t(avg_all_mat))
+write.table(avg_all_mat, file = "test.CSV", sep = ",")
+
+test= read.csv("C:/Users/BIG DATA/Desktop/test.csv", header=F)
+
+test[order(test$V2),decreasing = TRUE]
+test[order(test$V2, decreasing = TRUE),]
+ttt=test[order(test$V2, decreasing = TRUE),]
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

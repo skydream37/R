@@ -193,8 +193,8 @@ tapply(iris$Sepal.Length, iris$Species, mean)
 ```{R}
 #import data
 getwd()
-setwd("~/lecture/riii")
-load("Statistics/cdc.Rdata")
+setwd("E:/riii/Statistics")
+load("E:/riii/Statistics/cdc.Rdata")
 str(cdc)
 head(cdc)
 names(cdc)
@@ -216,9 +216,9 @@ table(cdc$exerany) / length(cdc$exerany)
 table(cdc$gender,cdc$exerany)
 
 #連續型資料作表
-table(cdc$height)
-summary(cdc$height)
-cut(cdc$height,seq(45,95,by=5))
+table(cdc$height) #連續資料,每個數值都做統計
+summary(cdc$height) #摘要
+cut(cdc$height,seq(45,95,by=5))#將資料從45-95每相差五分成一組
 
 #包含上界不包含下界
 table(cut(cdc$height,seq(45,95,by=5),right=T))
@@ -261,7 +261,7 @@ hist(cdc$height)
 hist(cdc$height,breaks = 30)
 hist(cdc$height,breaks = 50)
 
-stem(cdc$age)
+stem(cdc$age)  
 tmp=sample(cdc$age,100)
 stem(sample(cdc$age,100))
 ?stem
@@ -273,8 +273,9 @@ par(mfrow=c(1,1))
 boxplot(cdc$weight ~ cdc$gender)
 boxplot(cdc$height ~ cdc$gender)
 
+
 bmi = (cdc$weight/cdc$height^2) * 703
-boxplot(bmi ~ cdc$genhlth)
+boxplot(bmi ~ cdc$genhlth) #~左邊放的是data~右邊放的是類別
 
 #觀察兩組資料間關係:點散布圖
 plot(cdc$weight, cdc$height)
@@ -305,11 +306,11 @@ sort(a)
 median(a)
 
 sort(b)
-median(b)
+median(b)#算中位數
 
 table(c(1,4,4,3))
 which.max(table(c(1,4,4,3)))
-names(which.max(table(c(1,4,4,3))))
+names(which.max(table(c(1,4,4,3)))) #眾數  *mode()不是眾數的function
 
 mean(cdc$weight)
 median(cdc$weight)
@@ -320,14 +321,15 @@ names(which.max(table(cdc$h_group)))
 a = c(173,162,150,160,155,168,171,185,175,178,182)
 sort(a)
 range(a)
+range(a)[2]-range(a)[1] #全距
 
-quantile(a,0.5)
-quantile(a,0.25)
-quantile(a,0.75)
-quantile(a,0.75) - quantile(a,0.25)
+quantile(a,0.5) #第二四分位數
+quantile(a,0.25) #第一四分位數
+quantile(a,0.75)#第三四分位數
+quantile(a,0.75) - quantile(a,0.25) 
 IQR(a)
 fivenum(a)
-
+summary(a)
 boxplot(a,horizontal = T)
 
 b = c(a,226)
